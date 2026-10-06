@@ -3,306 +3,387 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сетка ролей — Ведьмак: Праздник бочки</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <title>Сетка ролей — Ведьмак: Праздник бочки (Туссент)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;600;700&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0b0908;
-            --panel-bg: #15120f;
+            --toussaint-bg: #110709;
+            --toussaint-panel: #1e0d11;
+            --toussaint-panel-card: #190a0e;
+            --wine-dark: #2a0b10;
+            --wine-deep: #44121a;
             --gold: #d4af37;
-            --gold-light: #f3e5ab;
-            --gold-dark: #8c7323;
-            --text-main: #dcd6cd;
-            --text-muted: #948877;
-            --card-border: #b89742;
+            --gold-light: #fbe8a6;
+            --gold-dark: #997a22;
+            --text-main: #f0eae1;
+            --text-muted: #b5a495;
+            --card-border: #c5a03d;
+            --card-back-bg: #1c090e;
         }
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-
         body {
-            background-color: var(--bg-color);
+            background-color: var(--toussaint-bg);
             color: var(--text-main);
-            font-family: 'Playfair Display', serif;
-            background-image: radial-gradient(circle at 50% 15%, #1f1914 0%, var(--bg-color) 85%);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            background-image: 
+                radial-gradient(circle at 50% 10%, rgba(85, 21, 32, 0.35) 0%, transparent 60%),
+                radial-gradient(circle at 20% 90%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 90%, rgba(140, 40, 55, 0.1) 0%, transparent 50%);
             min-height: 100vh;
-            padding: 30px 20px;
+            padding: 40px 20px;
         }
-
         header {
             text-align: center;
-            margin-bottom: 30px;
-            padding: 25px;
-            border-bottom: 2px solid var(--gold-dark);
-            background: linear-gradient(to bottom, rgba(21,18,15,0.8), transparent);
+            margin-bottom: 40px;
+            padding: 30px;
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(to right, transparent, var(--gold), transparent) 1;
+            background: linear-gradient(to bottom, rgba(30, 13, 17, 0.9), transparent);
         }
-
+        .subtitle-ornament {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-dark);
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
         h1 {
             font-family: 'Cinzel Decorative', serif;
-            color: var(--gold);
-            font-size: 2.3rem;
-            letter-spacing: 2px;
+            color: var(--gold-light);
+            font-size: 2.6rem;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            margin-bottom: 10px;
-            text-shadow: 0 3px 6px rgba(0,0,0,0.9);
+            margin-bottom: 5px;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.9), 0 0 20px rgba(212, 175, 55, 0.2);
         }
-
         .controls-wrapper {
             max-width: 1200px;
-            margin: 0 auto 30px auto;
+            margin: 0 auto 40px auto;
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
-
         .top-action-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 20px;
         }
-
         .search-box {
             flex: 1;
             min-width: 280px;
         }
-
         .search-box input {
             width: 100%;
-            padding: 12px 20px;
-            background: var(--panel-bg);
+            padding: 14px 22px;
+            background: var(--toussaint-panel);
             border: 2px solid var(--gold-dark);
             color: var(--text-main);
-            font-family: 'Playfair Display', serif;
-            font-size: 1rem;
-            border-radius: 6px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            border-radius: 8px;
             outline: none;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
-            transition: border-color 0.3s;
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
         }
-
         .search-box input:focus {
             border-color: var(--gold);
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.8), 0 0 15px rgba(212, 175, 55, 0.3);
         }
-
-        .witcher-add-btn {
-            background: linear-gradient(135deg, #2a2218 0%, #15120f 100%);
+        .toussaint-btn {
+            background: linear-gradient(135deg, #3d0e16 0%, #1a0609 100%);
             border: 2px solid var(--gold);
             color: var(--gold-light);
-            padding: 12px 25px;
+            padding: 14px 28px;
             font-family: 'Cinzel', serif;
-            font-size: 0.9rem;
-            font-weight: bold;
-            letter-spacing: 1px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
             cursor: pointer;
-            border-radius: 6px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6), inset 0 0 10px rgba(212, 175, 55, 0.2);
-            transition: all 0.3s ease;
+            gap: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.7), inset 0 0 15px rgba(212, 175, 55, 0.25);
+            transition: all 0.35s ease;
             text-transform: uppercase;
         }
-
-        .witcher-add-btn span {
+        .toussaint-btn span {
             font-size: 1.3rem;
             color: var(--gold);
-            line-height: 0;
         }
-
-        .witcher-add-btn:hover {
+        .toussaint-btn:hover {
             background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
-            color: var(--bg-color);
+            color: #110709;
             border-color: var(--gold-light);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+            transform: translateY(-2px);
         }
-
-        .witcher-add-btn:hover span {
-            color: var(--bg-color);
+        .toussaint-btn:hover span {
+            color: #110709;
         }
-
         .filters {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
+            justify-content: center;
         }
-
         .filter-btn {
-            background: var(--panel-bg);
+            background: var(--toussaint-panel);
             border: 1px solid var(--gold-dark);
-            color: var(--text-main);
-            padding: 10px 16px;
+            color: var(--text-muted);
+            padding: 10px 20px;
             cursor: pointer;
             font-family: 'Cinzel', serif;
-            font-size: 0.8rem;
-            border-radius: 4px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border-radius: 6px;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
         }
-
         .filter-btn:hover, .filter-btn.active {
-            background: var(--gold);
-            color: var(--bg-color);
-            border-color: var(--gold-light);
-            font-weight: bold;
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+            background: linear-gradient(135deg, var(--wine-deep), var(--wine-dark));
+            color: var(--gold-light);
+            border-color: var(--gold);
+            font-weight: 600;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            transform: translateY(-1px);
         }
-
         .grid {
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 35px;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 40px;
             justify-items: center;
         }
-
         .card-container {
             perspective: 1200px;
-            width: 260px;
-            height: 400px;
+            width: 270px;
+            height: 420px;
             cursor: pointer;
         }
-
         .card {
             width: 100%;
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
-            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.7));
+            transition: transform 0.8s cubic-bezier(0.3, 0.2, 0.2, 1);
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8));
         }
-
         .card-container:hover .card {
-            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3));
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.4));
         }
-
         .card-container.flipped .card {
             transform: rotateY(180deg);
         }
-
         .card-face {
             position: absolute;
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
             border-radius: 12px;
             border: 3px solid var(--card-border);
             overflow: hidden;
-            background: var(--panel-bg);
+            background: var(--toussaint-panel-card);
         }
-
         .card-front {
             display: flex;
             flex-direction: column;
+            z-index: 2;
         }
-
         .card-image-wrap {
             width: 100%;
-            height: 68%;
+            height: 70%;
             position: relative;
             border-bottom: 2px solid var(--gold-dark);
             overflow: hidden;
         }
-
         .card-front img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
+            transition: transform 0.6s ease;
         }
-
         .card-container:hover .card-front img {
-            transform: scale(1.05);
+            transform: scale(1.06);
         }
-
         .faction-badge {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(11, 9, 8, 0.85);
+            top: 10px;
+            right: 10px;
+            background: rgba(17, 7, 9, 0.9);
             border: 1px solid var(--gold);
             color: var(--gold-light);
-            padding: 4px 8px;
+            padding: 5px 10px;
             font-family: 'Cinzel', serif;
-            font-size: 0.65rem;
-            border-radius: 4px;
-            letter-spacing: 1px;
+            font-size: 0.7rem;
+            border-radius: 5px;
+            letter-spacing: 1.2px;
             z-index: 2;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.6);
         }
-
         .card-front-info {
-            padding: 12px;
+            padding: 14px;
             text-align: center;
-            background: linear-gradient(to bottom, #181411, #0f0d0b);
+            background: linear-gradient(to bottom, #240b10, #130508);
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
-
         .char-name {
             font-family: 'Cinzel', serif;
             color: var(--gold-light);
-            font-size: 1.05rem;
+            font-size: 1.15rem;
             font-weight: 700;
             margin-bottom: 4px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
-
         .player-name {
             color: var(--text-muted);
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             font-style: italic;
         }
-
         .flip-hint {
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             color: var(--gold-dark);
-            margin-top: 8px;
+            margin-top: 6px;
             letter-spacing: 2px;
             text-transform: uppercase;
             font-family: 'Cinzel', serif;
+            flex-shrink: 0;
+            text-align: center;
         }
-
         .card-back {
-            background: #171310;
-            background-image: radial-gradient(circle at center, #241c15 0%, #120e0b 100%);
+            background: var(--card-back-bg);
+            background-image: 
+                radial-gradient(circle at center, rgba(68, 18, 26, 0.5) 0%, rgba(17, 7, 9, 0.95) 100%),
+                repeating-linear-gradient(45deg, rgba(212, 175, 55, 0.02) 0, rgba(212, 175, 55, 0.02) 2px, transparent 0, transparent 4px);
             color: var(--text-main);
-            transform: rotateY(180deg) scaleX(-1);
+            transform: rotateY(180deg);
             padding: 16px;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
             border: 3px solid var(--gold-dark);
+            z-index: 1;
         }
-
         .card-back-content {
-            border: 1px dashed rgba(212, 175, 55, 0.3);
+            border: 1px dashed rgba(212, 175, 55, 0.4);
             height: 100%;
-            padding: 10px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
+            background: rgba(11, 7, 9, 0.4);
+            border-radius: 6px;
+            overflow: hidden;
         }
-
         .card-back h3 {
             font-family: 'Cinzel', serif;
             color: var(--gold);
-            font-size: 0.95rem;
+            font-size: 1.05rem;
             border-bottom: 1px solid var(--gold-dark);
-            padding-bottom: 4px;
+            padding-bottom: 6px;
             margin-bottom: 8px;
             text-align: center;
+            flex-shrink: 0;
         }
-
-        .card-back p {
-            font-size: 0.8rem;
-            line-height: 1.4;
-            color: var(--text-main);
+        .card-scroll-area {
             overflow-y: auto;
-            max-height: 290px;
+            flex-grow: 1;
             padding-right: 4px;
-            text-align: justify
+            margin-bottom: 6px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--gold-dark) transparent;
+        }
+        .card-scroll-area::-webkit-scrollbar {
+            width: 5px;
+        }
+        .card-scroll-area::-webkit-scrollbar-thumb {
+            background-color: var(--gold-dark);
+            border-radius: 4px;
+        }
+        .card-back p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--text-main);
+            text-align: justify;
+            white-space: pre-wrap;
+        }
+        .empty-notice {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px;
+            color: var(--text-muted);
+            font-style: italic;
+            font-size: 1.2rem;
+            border: 1px dashed var(--gold-dark);
+            border-radius: 10px;
+            width: 100%;
+            background: rgba(30, 13, 17, 0.4);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 4, 6, 0.88);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: var(--toussaint-panel);
+            border: 3px solid var(--gold);
+            padding: 35px;
+            width: 100%;
+            max-width: 520px;
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.9), 0 0 30px rgba(212, 175, 55, 0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-content h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-light);
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--gold-dark);
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            color: var(--gold);
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: var(--toussaint-bg);
+            border: 1px solid var(--gold-dark);
+            color: var(--text-main);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
