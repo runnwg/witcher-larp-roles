@@ -427,9 +427,9 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Портрет (фотография)</label>
-                    <input type="file" id="photoInput" accept="image/*">
-                    <small style="color: var(--text-muted); display:block; margin-top:4px;">Фото будет автоматически оптимизировано для облака</small>
+                    <label>Ссылка на портрет (URL изображения)</label>
+                    <input type="url" id="photoUrlInput" placeholder="https://i.imgur.com/... или любая прямая ссылка на картинку">
+                    <small style="color: var(--text-muted); display:block; margin-top:4px;">Если оставить пустым, подставится заглушка</small>
                 </div>
                 <div class="form-group">
                     <label>Квента, цели и секреты</label>
@@ -496,9 +496,7 @@
                     syncStatus.textContent = "Изменения сохранены для всех";
                     syncStatus.className = "sync-status online";
                 } else {
-                    const errText = await response.text();
-                    console.error("JSONBin ошибка:", errText);
-                    throw new Error("Сервер отклонил запрос (возможно, превышен размер данных)");
+                    throw new Error("Сервер отклонил запрос");
                 }
             } catch(e) {
                 console.error("Ошибка сохранения в облако:", e);
@@ -543,7 +541,7 @@
                         <div class="card-side card-front-side">
                             <div class="card-image-wrap">
                                 <span class="faction-badge">${role.faction}</span>
-                                <img src="${role.photo}" alt="${role.charName}" onerror="this.src='https://via.placeholder.com/300x400?text=No+Photo'">
+                                <img src="${role.photo || 'https://via.placeholder.com/300x400?text=No+Photo'}" alt="${role.charName}" onerror="this.src='https://via.placeholder.com/300x400?text=No+Photo'">
                             </div>
                             <div class="card-front-info">
                                 <div class="char-name">${role.charName}</div>
@@ -611,6 +609,7 @@
             document.getElementById('charNameInput').value = role.charName;
             document.getElementById('playerNameInput').value = role.playerName;
             document.getElementById('factionInput').value = role.faction;
+            document.getElementById('photoUrlInput').value = role.photo || '';
             document.getElementById('descInput').value = role.description;
 
             addModal.style.display = 'flex';
@@ -619,72 +618,38 @@
         closeModal.addEventListener('click', () => { addModal.style.display = 'none'; });
         window.addEventListener('click', (e) => { if(e.target === addModal) addModal.style.display = 'none'; });
 
-        // Усиленное сжатие изображений для предотвращения переполнения JSONBin
-        function compressImage(file, callback) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 250; // Уменьшено для экономии места в JSON
-                    const scaleSize = MAX_WIDTH / img.width;
-                    
-                    canvas.width = (img.width > MAX_WIDTH) ? MAX_WIDTH : img.width;
-                    canvas.height = (img.width > MAX_WIDTH) ? img.height * scaleSize : img.height;
-
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-                    const dataUrl = canvas.toDataURL('image/jpeg', 0.5); // Качество 50%
-                    callback(dataUrl);
-                }
-                img.src = e.target.result;
-            }
-            reader.readAsDataURL(file);
-        }
-
         addRoleForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const photoInput = document.getElementById('photoInput');
-            const file = photoInput.files[0];
             const editingId = editRoleId.value;
+            const inputUrl = document.getElementById('photoUrlInput').value.trim();
+            const photoUrl = inputUrl !== "" ? inputUrl : 'https://via.placeholder.com/300x400?text=No+Photo';
 
-            const updateRoleData = (photoUrl) => {
-                if (editingId) {
-                    const index = roles.findIndex(r => r.id == editingId);
-                    if (index !== -1) {
-                        roles[index].charName = document.getElementById('charNameInput').value;
-                        roles[index].playerName = document.getElementById('playerNameInput').value;
-                        roles[index].faction = document.getElementById('factionInput').value;
-                        roles[index].description = document.getElementById('descInput').value;
-                        if (photoUrl) roles[index].photo = photoUrl;
-                    }
-                } else {
-                    const newRole = {
-                        id: Date.now(),
-                        charName: document.getElementById('charNameInput').value,
-                        playerName: document.getElementById('playerNameInput').value,
-                        faction: document.getElementById('factionInput').value,
-                        photo: photoUrl || 'https://via.placeholder.com/300x400?text=No+Photo',
-                        description: document.getElementById('descInput').value
-                    };
-                    roles.push(newRole);
+            if (editingId) {
+                const index = roles.findIndex(r => r.id == editingId);
+                if (index !== -1) {
+                    roles[index].charName = document.getElementById('charNameInput').value;
+                    roles[index].playerName = document.getElementById('playerNameInput').value;
+                    roles[index].faction = document.getElementById('factionInput').value;
+                    roles[index].photo = photoUrl;
+                    roles[index].description = document.getElementById('descInput').value;
                 }
-
-                saveRolesToCloud();
-                renderRoles();
-
-                addRoleForm.reset();
-                addModal.style.display = 'none';
-            };
-
-            if(file) {
-                compressImage(file, function(compressedDataUrl) {
-                    updateRoleData(compressedDataUrl);
-                });
             } else {
-                updateRoleData(editingId ? null : 'https://via.placeholder.com/300x400?text=No+Photo');
+                const newRole = {
+                    id: Date.now(),
+                    charName: document.getElementById('charNameInput').value,
+                    playerName: document.getElementById('playerNameInput').value,
+                    faction: document.getElementById('factionInput').value,
+                    photo: photoUrl,
+                    description: document.getElementById('descInput').value
+                };
+                roles.push(newRole);
             }
+
+            saveRolesToCloud();
+            renderRoles();
+
+            addRoleForm.reset();
+            addModal.style.display = 'none';
         });
 
         fetchRoles();
