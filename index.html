@@ -102,11 +102,6 @@
             border-radius: 8px;
             outline: none;
             box-shadow: inset 0 3px 8px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5);
-            transition: all 0.3s ease;
-        }
-        .search-box input:focus {
-            border-color: var(--gold);
-            box-shadow: inset 0 3px 8px rgba(0,0,0,0.8), 0 0 15px rgba(212, 175, 55, 0.3);
         }
         .toussaint-btn {
             background: linear-gradient(135deg, #3d0e16 0%, #1a0609 100%);
@@ -191,10 +186,6 @@
             overflow: hidden;
             background: var(--toussaint-panel-card);
             box-shadow: 0 10px 20px rgba(0,0,0,0.8);
-            transition: filter 0.3s ease;
-        }
-        .card-container:hover .card {
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
         }
         .card-side {
             position: absolute;
@@ -206,28 +197,11 @@
             flex-direction: column;
             transition: opacity 0.3s ease;
         }
-        
-        .card.is-front .card-back-side {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .card.is-back .card-front-side {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .card.is-front .card-front-side {
-            opacity: 1;
-            z-index: 2;
-        }
-        .card.is-back .card-back-side {
-            opacity: 1;
-            z-index: 2;
-            pointer-events: auto; /* Позволяет кликать по кнопкам внутри бэка */
-        }
+        .card.is-front .card-back-side { opacity: 0; pointer-events: none; }
+        .card.is-back .card-front-side { opacity: 0; pointer-events: none; }
+        .card.is-front .card-front-side { opacity: 1; z-index: 2; }
+        .card.is-back .card-back-side { opacity: 1; z-index: 2; pointer-events: auto; }
 
-        .card-front-side {
-            z-index: 1;
-        }
         .card-image-wrap {
             width: 100%;
             height: 70%;
@@ -239,10 +213,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.6s ease;
-        }
-        .card-container:hover .card-front-side img {
-            transform: scale(1.06);
         }
         .faction-badge {
             position: absolute;
@@ -257,7 +227,6 @@
             border-radius: 5px;
             letter-spacing: 1.2px;
             z-index: 2;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.6);
         }
         .card-front-info {
             padding: 14px;
@@ -274,7 +243,6 @@
             font-size: 1.15rem;
             font-weight: 700;
             margin-bottom: 4px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
         .player-name {
             color: var(--text-muted);
@@ -288,18 +256,11 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             font-family: 'Cinzel', serif;
-            flex-shrink: 0;
             text-align: center;
         }
-
         .card-back-side {
             background: var(--card-back-bg);
-            background-image: 
-                radial-gradient(circle at center, rgba(68, 18, 26, 0.5) 0%, rgba(17, 7, 9, 0.95) 100%),
-                repeating-linear-gradient(45deg, rgba(212, 175, 55, 0.02) 0, rgba(212, 175, 55, 0.02) 2px, transparent 0, transparent 4px);
-            color: var(--text-main);
             padding: 16px;
-            z-index: 1;
         }
         .card-back-content {
             border: 1px dashed rgba(212, 175, 55, 0.4);
@@ -319,22 +280,12 @@
             padding-bottom: 6px;
             margin-bottom: 8px;
             text-align: center;
-            flex-shrink: 0;
         }
         .card-scroll-area {
             overflow-y: auto;
             flex-grow: 1;
             padding-right: 4px;
             margin-bottom: 6px;
-            scrollbar-width: thin;
-            scrollbar-color: var(--gold-dark) transparent;
-        }
-        .card-scroll-area::-webkit-scrollbar {
-            width: 5px;
-        }
-        .card-scroll-area::-webkit-scrollbar-thumb {
-            background-color: var(--gold-dark);
-            border-radius: 4px;
         }
         .card-back-side p {
             font-size: 0.95rem;
@@ -347,7 +298,6 @@
             display: flex;
             gap: 8px;
             margin-top: 6px;
-            flex-shrink: 0;
         }
         .edit-card-btn {
             flex: 1;
@@ -357,19 +307,15 @@
             padding: 6px;
             font-family: 'Cinzel', serif;
             font-size: 0.75rem;
-            letter-spacing: 1px;
             cursor: pointer;
             border-radius: 4px;
-            transition: all 0.2s;
             text-align: center;
             text-transform: uppercase;
         }
         .edit-card-btn:hover {
             background: var(--gold);
             color: var(--toussaint-bg);
-            border-color: var(--gold-light);
         }
-
         .empty-notice {
             grid-column: 1 / -1;
             text-align: center;
@@ -379,116 +325,42 @@
             font-size: 1.2rem;
             border: 1px dashed var(--gold-dark);
             border-radius: 10px;
-            width: 100%;
             background: rgba(30, 13, 17, 0.4);
         }
         .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(10, 4, 6, 0.88);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 20px;
-            overflow-y: auto;
-            backdrop-filter: blur(5px);
+            justify-content: center; align-items: center;
+            z-index: 1000; padding: 20px; overflow-y: auto;
         }
         .modal-content {
             background: var(--toussaint-panel);
             border: 3px solid var(--gold);
-            padding: 35px;
-            width: 100%;
-            max-width: 520px;
-            border-radius: 12px;
-            position: relative;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.9), 0 0 30px rgba(212, 175, 55, 0.2);
-            max-height: 90vh;
-            overflow-y: auto;
+            padding: 35px; width: 100%; max-width: 520px;
+            border-radius: 12px; position: relative; max-height: 90vh; overflow-y: auto;
         }
         .modal-content h2 {
-            font-family: 'Cinzel', serif;
-            color: var(--gold-light);
-            margin-bottom: 25px;
-            text-align: center;
-            font-size: 1.5rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            border-bottom: 1px solid var(--gold-dark);
-            padding-bottom: 10px;
+            font-family: 'Cinzel', serif; color: var(--gold-light);
+            margin-bottom: 25px; text-align: center; font-size: 1.5rem;
+            border-bottom: 1px solid var(--gold-dark); padding-bottom: 10px;
         }
-        .form-group {
-            margin-bottom: 18px;
-        }
-        .form-group label {
-            display: block;
-            font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
-            color: var(--gold);
-            margin-bottom: 6px;
-            letter-spacing: 0.5px;
-        }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-family: 'Cinzel', serif; font-size: 0.85rem; color: var(--gold); margin-bottom: 6px; }
         .form-group input, .form-group textarea, .form-group select {
-            width: 100%;
-            padding: 12px;
-            background: var(--toussaint-bg);
-            border: 1px solid var(--gold-dark);
-            color: var(--text-main);
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
-            border-radius: 6px;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+            width: 100%; padding: 12px; background: var(--toussaint-bg);
+            border: 1px solid var(--gold-dark); color: var(--text-main);
+            font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; border-radius: 6px;
         }
-        .form-group input[type="file"] {
-            padding: 8px;
-            cursor: pointer;
-        }
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-            border-color: var(--gold);
-            outline: none;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8), 0 0 10px rgba(212, 175, 55, 0.2);
-        }
-        .form-group textarea {
-            resize: vertical;
-            height: 120px;
-        }
+        .form-group textarea { resize: vertical; height: 120px; }
         .submit-btn {
             background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
-            color: var(--toussaint-bg);
-            border: none;
-            padding: 14px 20px;
-            font-family: 'Cinzel', serif;
-            font-weight: bold;
-            font-size: 0.95rem;
-            letter-spacing: 1px;
-            cursor: pointer;
-            width: 100%;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-            text-transform: uppercase;
+            color: var(--toussaint-bg); border: none; padding: 14px 20px;
+            font-family: 'Cinzel', serif; font-weight: bold; cursor: pointer;
+            width: 100%; border-radius: 6px; margin-top: 15px; text-transform: uppercase;
         }
-        .submit-btn:hover {
-            background: var(--gold-light);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
-        }
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 1.8rem;
-            font-family: sans-serif;
-            transition: color 0.3s;
-        }
-        .close-modal:hover {
-            color: var(--gold);
-        }
+        .close-modal { position: absolute; top: 15px; right: 20px; color: var(--text-muted); cursor: pointer; font-size: 1.8rem; }
     </style>
 </head>
 <body>
@@ -557,10 +429,10 @@
                 <div class="form-group">
                     <label>Портрет (фотография)</label>
                     <input type="file" id="photoInput" accept="image/*">
-                    <small style="color: var(--text-muted); display:block; margin-top:4px;">Оставьте пустым при редактировании, если не хотите менять фото</small>
+                    <small style="color: var(--text-muted); display:block; margin-top:4px;">Фото будет автоматически оптимизировано для облака</small>
                 </div>
                 <div class="form-group">
-                    <label>Квента, цели и секреты (на оборот карточки)</label>
+                    <label>Квента, цели и секреты</label>
                     <textarea id="descInput" required placeholder="Опишите характер, тайны и владения персонажа..."></textarea>
                 </div>
                 <button type="submit" class="submit-btn" id="submitBtnText">Занести в летопись</button>
@@ -580,9 +452,7 @@
             syncStatus.className = "sync-status syncing";
             try {
                 const response = await fetch(API_URL, {
-                    headers: {
-                        'X-Master-Key': '$2a$10$CaH0kNC6Zc07HLFNngmnwOKb3Ql3tb/WW83pLtLfVASNRBqPObyxW' 
-                    }
+                    headers: { 'X-Master-Key': '$2a$10$CaH0kNC6Zc07HLFNngmnwOKb3Ql3tb/WW83pLtLfVASNRBqPObyxW' }
                 });
                 if (response.ok) {
                     const data = await response.json();
@@ -595,11 +465,11 @@
                     syncStatus.className = "sync-status online";
                     renderRoles();
                 } else {
-                    throw new Error("Ошибка сервера");
+                    throw new Error("Ошибка сервера: " + response.status);
                 }
             } catch(e) {
-                console.warn("Облако недоступно, переходим в автономный режим:", e);
-                syncStatus.textContent = "Автономный режим (локальное хранилище)";
+                console.warn("Автономный режим:", e);
+                syncStatus.textContent = "Сохранено локально (нет связи с облаком)";
                 syncStatus.className = "sync-status error";
                 const local = localStorage.getItem('witcher_larp_roles_fallback');
                 if (local) roles = JSON.parse(local);
@@ -626,7 +496,9 @@
                     syncStatus.textContent = "Изменения сохранены для всех";
                     syncStatus.className = "sync-status online";
                 } else {
-                    throw new Error("Не удалось записать в облако");
+                    const errText = await response.text();
+                    console.error("JSONBin ошибка:", errText);
+                    throw new Error("Сервер отклонил запрос (возможно, превышен размер данных)");
                 }
             } catch(e) {
                 console.error("Ошибка сохранения в облако:", e);
@@ -668,7 +540,6 @@
                 cardContainer.className = 'card-container';
                 cardContainer.innerHTML = `
                     <div class="card is-front">
-                        <!-- Лицевая сторона -->
                         <div class="card-side card-front-side">
                             <div class="card-image-wrap">
                                 <span class="faction-badge">${role.faction}</span>
@@ -680,7 +551,6 @@
                                 <div class="flip-hint">Нажми, чтобы прочитать квенту</div>
                             </div>
                         </div>
-                        <!-- Обратная сторона -->
                         <div class="card-side card-back-side">
                             <div class="card-back-content">
                                 <h3>${role.charName}</h3>
@@ -697,17 +567,13 @@
                 `;
 
                 const cardElement = cardContainer.querySelector('.card');
-                
-                // Переворот карточки при клике (если не нажали на кнопку редактирования)
                 cardContainer.addEventListener('click', (e) => {
                     if (e.target.closest('.edit-card-btn')) return;
                     cardElement.classList.toggle('is-front');
                     cardElement.classList.toggle('is-back');
                 });
 
-                // Обработка кнопки редактирования
-                const editBtn = cardContainer.querySelector('.edit-card-btn');
-                editBtn.addEventListener('click', (e) => {
+                cardContainer.querySelector('.edit-card-btn').addEventListener('click', (e) => {
                     e.stopPropagation();
                     openEditModal(role.id);
                 });
@@ -732,7 +598,6 @@
             submitBtnText.textContent = "Занести в летопись";
             editRoleId.value = "";
             addRoleForm.reset();
-            document.getElementById('photoInput').setAttribute('required', 'required');
             addModal.style.display = 'flex';
         });
 
@@ -747,28 +612,21 @@
             document.getElementById('playerNameInput').value = role.playerName;
             document.getElementById('factionInput').value = role.faction;
             document.getElementById('descInput').value = role.description;
-            document.getElementById('photoInput').removeAttribute('required'); // Фото необязательно при сохранении
 
             addModal.style.display = 'flex';
         }
 
-        closeModal.addEventListener('click', () => {
-            addModal.style.display = 'none';
-        });
+        closeModal.addEventListener('click', () => { addModal.style.display = 'none'; });
+        window.addEventListener('click', (e) => { if(e.target === addModal) addModal.style.display = 'none'; });
 
-        window.addEventListener('click', (e) => {
-            if(e.target === addModal) {
-                addModal.style.display = 'none';
-            }
-        });
-
+        // Усиленное сжатие изображений для предотвращения переполнения JSONBin
         function compressImage(file, callback) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 400;
+                    const MAX_WIDTH = 250; // Уменьшено для экономии места в JSON
                     const scaleSize = MAX_WIDTH / img.width;
                     
                     canvas.width = (img.width > MAX_WIDTH) ? MAX_WIDTH : img.width;
@@ -777,7 +635,7 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-                    const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.5); // Качество 50%
                     callback(dataUrl);
                 }
                 img.src = e.target.result;
@@ -793,19 +651,15 @@
 
             const updateRoleData = (photoUrl) => {
                 if (editingId) {
-                    // Редактирование существующего
                     const index = roles.findIndex(r => r.id == editingId);
                     if (index !== -1) {
                         roles[index].charName = document.getElementById('charNameInput').value;
                         roles[index].playerName = document.getElementById('playerNameInput').value;
                         roles[index].faction = document.getElementById('factionInput').value;
                         roles[index].description = document.getElementById('descInput').value;
-                        if (photoUrl) {
-                            roles[index].photo = photoUrl;
-                        }
+                        if (photoUrl) roles[index].photo = photoUrl;
                     }
                 } else {
-                    // Создание нового
                     const newRole = {
                         id: Date.now(),
                         charName: document.getElementById('charNameInput').value,
@@ -829,16 +683,11 @@
                     updateRoleData(compressedDataUrl);
                 });
             } else {
-                if (editingId) {
-                    updateRoleData(null); // Оставляем старое фото
-                } else {
-                    updateRoleData('https://via.placeholder.com/300x400?text=No+Photo');
-                }
+                updateRoleData(editingId ? null : 'https://via.placeholder.com/300x400?text=No+Photo');
             }
         });
 
         fetchRoles();
-        setInterval(fetchRoles, 15000);
     </script>
 </body>
 </html>
