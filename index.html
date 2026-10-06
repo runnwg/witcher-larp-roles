@@ -208,12 +208,12 @@
             position: relative;
             border-bottom: 2px solid var(--gold-dark);
             overflow: hidden;
-            background-color: #0b0507; /* Фоновый цвет для пустых областей */
+            background-color: #0b0507;
         }
         .card-front-side img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Картинка теперь целиком помещается в блок без обрезки */
+            object-fit: contain;
             object-position: center;
         }
         .faction-badge {
@@ -399,6 +399,21 @@
 
     <div class="grid" id="cardsGrid"></div>
 
+    <!-- Модальное окно запроса пин-кода администратора -->
+    <div class="modal" id="authModal">
+        <div class="modal-content" style="max-width: 400px;">
+            <span class="close-modal" id="closeAuthModal">&times;</span>
+            <h2>Доступ хранителей</h2>
+            <div class="form-group">
+                <label>Введите код администратора</label>
+                <input type="password" id="adminPasswordInput" placeholder="Секретный код...">
+            </div>
+            <button type="button" class="submit-btn" id="submitAuthBtn">Подтвердить</button>
+            <div id="authError" style="color: #e53935; font-size: 0.9rem; text-align: center; margin-top: 10px; display: none;">Неверный код!</div>
+        </div>
+    </div>
+
+    <!-- Модальное окно добавления/редактирования роли -->
     <div class="modal" id="addModal">
         <div class="modal-content">
             <span class="close-modal" id="closeModal">&times;</span>
@@ -430,7 +445,7 @@
                 </div>
                 <div class="form-group">
                     <label>Ссылка на портрет (URL изображения)</label>
-                    <input type="url" id="photoUrlInput" placeholder="https://i.imgur.com/... или любая прямая ссылка на картинку">
+                    <input type="url" id="photoUrlInput" placeholder="Прямая ссылка на картинку">
                     <small style="color: var(--text-muted); display:block; margin-top:4px;">Если оставить пустым, подставится заглушка</small>
                 </div>
                 <div class="form-group">
@@ -446,7 +461,11 @@
         const BIN_ID = '6ac4cb9dffd5d16053522d13';
         const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
+        // Укажите здесь свой секретный пин-код/пароль для 3 админов
+        const ADMIN_PIN = "toussaint2026"; 
+
         let roles = [];
+        let pendingAction = null; // Какое действие хотел сделать админ после ввода пароля
         const syncStatus = document.getElementById('syncStatus');
 
         async function fetchRoles() {
@@ -518,7 +537,46 @@
         const submitBtnText = document.getElementById('submitBtnText');
         const editRoleId = document.getElementById('editRoleId');
 
+        // Модалка авторизации
+        const authModal = document.getElementById('authModal');
+        const closeAuthModal = document.getElementById('closeAuthModal');
+        const submitAuthBtn = document.getElementById('submitAuthBtn');
+        const adminPasswordInput = document.getElementById('adminPasswordInput');
+        const authError = document.getElementById('authError');
+
         let currentFaction = 'all';
+
+        // Проверяем, авторизован ли админ в текущей сессии браузера
+        function checkAdminAccess(callback) {
+            if (sessionStorage.getItem('toussaint_admin_logged') === 'true') {
+                callback(); // Если уже вводил правильный пароль в этой вкладке — сразу пускаем
+            } else {
+                pendingAction = callback;
+                adminPasswordInput.value = '';
+                authError.style.display = 'none';
+                authModal.style.display = 'flex';
+                adminPasswordInput.focus();
+            }
+        }
+
+        submitAuthBtn.addEventListener('click', () => {
+            if (adminPasswordInput.value === ADMIN_PIN) {
+                sessionStorage.setItem('toussaint_admin_logged', 'true');
+                authModal.style.display = 'none';
+                if (pendingAction) {
+                    pendingAction();
+                    pendingAction = null;
+                }
+            } else {
+                authError.style.display = 'block';
+            }
+        });
+
+        adminPasswordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') submitAuthBtn.click();
+        });
+
+        closeAuthModal.addEventListener('click', () => { authModal.style.display = 'none'; });
 
         function renderRoles() {
             grid.innerHTML = '';
@@ -531,7 +589,7 @@
             });
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div class="empty-notice">В данной летописи пока не найдено благородных персон. Нажмите «Добавить роль», чтобы вписать их имена.</div>`;
+                grid.innerHTML = `<div class="empty-notice">В данной летописи пока не найдено благородных персон.</div>`;
                 return;
             }
 
@@ -575,7 +633,10 @@
 
                 cardContainer.querySelector('.edit-card-btn').addEventListener('click', (e) => {
                     e.stopPropagation();
-                    openEditModal(role.id);
+                    // Запрашиваем пин-код перед открытием редактирования
+                    checkAdminAccess(() => {
+                        openEditModal(role.id);
+                    });
                 });
 
                 grid.appendChild(cardContainer);
@@ -593,12 +654,15 @@
 
         searchInput.addEventListener('input', renderRoles);
 
+        // Кнопка добавления роли теперь проверяет права админа
         openModalBtn.addEventListener('click', () => {
-            modalTitle.textContent = "Добавить персонажа";
-            submitBtnText.textContent = "Занести в летопись";
-            editRoleId.value = "";
-            addRoleForm.reset();
-            addModal.style.display = 'flex';
+            checkAdminAccess(() => {
+                modalTitle.textContent = "Добавить персонажа";
+                submitBtnText.textContent = "Занести в летопись";
+                editRoleId.value = "";
+                addRoleForm.reset();
+                addModal.style.display = 'flex';
+            });
         });
 
         function openEditModal(id) {
