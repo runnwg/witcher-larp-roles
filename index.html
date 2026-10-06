@@ -533,7 +533,7 @@
 
     <script>
         // Использование бесплатного публичного хранилища JSONbin для общей синхронизации между всеми игроками
-        const BIN_ID = '673a5a7ead19ca34f8c9b3a1'; // Общий демо-бин (для реальной игры вы можете создать свой бесплатный аккаунт на jsonbin.io и заменить ID)
+        const BIN_ID = '6ac4cb9dffd5d16053522d13'; // Общий демо-бин (для реальной игры вы можете создать свой бесплатный аккаунт на jsonbin.io и заменить ID)
         const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
         let roles = [];
@@ -546,7 +546,7 @@
                 const response = await fetch(API_URL, {
                     headers: {
                         // Публичный доступ на чтение
-                        'X-Master-Key': '$2a$10$C1Jz6YV8TjZ5pYfN2gW5n.8G6OqW9lX8Ue5qW3V8U9v6Z2b7x5V9W' 
+                        'X-Master-Key': '$2a$10$CaH0kNC6Zc07HLFNngmnwOKb3Ql3tb/WW83pLtLfVASNRBqPObyxW' 
                     }
                 });
                 if (response.ok) {
@@ -585,7 +585,7 @@
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-Master-Key': '$2a$10$C1Jz6YV8TjZ5pYfN2gW5n.8G6OqW9lX8Ue5qW3V8U9v6Z2b7x5V9W'
+                        'X-Master-Key': '$2a$10$CaH0kNC6Zc07HLFNngmnwOKb3Ql3tb/WW83pLtLfVASNRBqPObyxW'
                     },
                     body: JSON.stringify({ roles: roles })
                 });
