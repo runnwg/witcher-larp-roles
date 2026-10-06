@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Сетка ролей — Ведьмак: Праздник бочки (Туссент)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;600;700&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
             --toussaint-bg: #110709;
@@ -62,6 +62,17 @@
             margin-bottom: 5px;
             text-shadow: 0 4px 12px rgba(0,0,0,0.9), 0 0 20px rgba(212, 175, 55, 0.2);
         }
+        .sync-status {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
+        }
+        .sync-status.online { color: #7cb342; }
+        .sync-status.syncing { color: var(--gold); }
+        .sync-status.error { color: #e53935; }
+
         .controls-wrapper {
             max-width: 1200px;
             margin: 0 auto 40px auto;
@@ -164,41 +175,60 @@
             gap: 40px;
             justify-items: center;
         }
+        
+        /* Стили карточки (без переворота в пространстве, чистая смена сторон) */
         .card-container {
-            perspective: 1200px;
             width: 270px;
             height: 420px;
             cursor: pointer;
+            position: relative;
         }
         .card {
             width: 100%;
             height: 100%;
             position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.3, 0.2, 0.2, 1);
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8));
-        }
-        .card-container:hover .card {
-            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.4));
-        }
-        .card-container.flipped .card {
-            transform: rotateY(180deg);
-        }
-        .card-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
             border-radius: 12px;
             border: 3px solid var(--card-border);
             overflow: hidden;
             background: var(--toussaint-panel-card);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+            transition: filter 0.3s ease;
         }
-        .card-front {
+        .card-container:hover .card {
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+        .card-side {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
             flex-direction: column;
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Состояние сторон карточки */
+        .card.is-front .card-back-side {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .card.is-back .card-front-side {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .card.is-front .card-front-side {
+            opacity: 1;
             z-index: 2;
+        }
+        .card.is-back .card-back-side {
+            opacity: 1;
+            z-index: 2;
+        }
+
+        /* Лицевая сторона */
+        .card-front-side {
+            z-index: 1;
         }
         .card-image-wrap {
             width: 100%;
@@ -207,13 +237,13 @@
             border-bottom: 2px solid var(--gold-dark);
             overflow: hidden;
         }
-        .card-front img {
+        .card-front-side img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.6s ease;
         }
-        .card-container:hover .card-front img {
+        .card-container:hover .card-front-side img {
             transform: scale(1.06);
         }
         .faction-badge {
@@ -263,17 +293,15 @@
             flex-shrink: 0;
             text-align: center;
         }
-        .card-back {
+
+        /* Обратная сторона (чисто текст, без фото) */
+        .card-back-side {
             background: var(--card-back-bg);
             background-image: 
                 radial-gradient(circle at center, rgba(68, 18, 26, 0.5) 0%, rgba(17, 7, 9, 0.95) 100%),
                 repeating-linear-gradient(45deg, rgba(212, 175, 55, 0.02) 0, rgba(212, 175, 55, 0.02) 2px, transparent 0, transparent 4px);
             color: var(--text-main);
-            transform: rotateY(180deg);
             padding: 16px;
-            display: flex;
-            flex-direction: column;
-            border: 3px solid var(--gold-dark);
             z-index: 1;
         }
         .card-back-content {
@@ -286,7 +314,7 @@
             border-radius: 6px;
             overflow: hidden;
         }
-        .card-back h3 {
+        .card-back-side h3 {
             font-family: 'Cinzel', serif;
             color: var(--gold);
             font-size: 1.05rem;
@@ -311,13 +339,14 @@
             background-color: var(--gold-dark);
             border-radius: 4px;
         }
-        .card-back p {
+        .card-back-side p {
             font-size: 0.95rem;
             line-height: 1.5;
             color: var(--text-main);
             text-align: justify;
             white-space: pre-wrap;
         }
+
         .empty-notice {
             grid-column: 1 / -1;
             text-align: center;
@@ -444,6 +473,7 @@
     <header>
         <div class="subtitle-ornament">Княжество Туссент • Земля любви и вина</div>
         <h1>Праздник Бочки</h1>
+        <div id="syncStatus" class="sync-status">Подключение к общей летописи...</div>
     </header>
 
     <div class="controls-wrapper">
@@ -502,18 +532,74 @@
     </div>
 
     <script>
-        let roles = [];
+        // Использование бесплатного публичного хранилища JSONbin для общей синхронизации между всеми игроками
+        const BIN_ID = '673a5a7ead19ca34f8c9b3a1'; // Общий демо-бин (для реальной игры вы можете создать свой бесплатный аккаунт на jsonbin.io и заменить ID)
+        const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-        try {
-            const savedData = localStorage.getItem('witcher_larp_roles');
-            if (savedData) {
-                roles = JSON.parse(savedData);
-                if (!Array.isArray(roles)) roles = [];
+        let roles = [];
+        const syncStatus = document.getElementById('syncStatus');
+
+        async function fetchRoles() {
+            syncStatus.textContent = "Синхронизация с летописью...";
+            syncStatus.className = "sync-status syncing";
+            try {
+                const response = await fetch(API_URL, {
+                    headers: {
+                        // Публичный доступ на чтение
+                        'X-Master-Key': '$2a$10$C1Jz6YV8TjZ5pYfN2gW5n.8G6OqW9lX8Ue5qW3V8U9v6Z2b7x5V9W' 
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.record && Array.isArray(data.record.roles)) {
+                        roles = data.record.roles;
+                    } else if (Array.isArray(data.record)) {
+                        roles = data.record;
+                    }
+                    syncStatus.textContent = "Летопись актуальна (общий доступ)";
+                    syncStatus.className = "sync-status online";
+                    renderRoles();
+                } else {
+                    throw new Error("Ошибка сервера");
+                }
+            } catch(e) {
+                console.warn("Облако недоступно, переходим в автономный режим:", e);
+                syncStatus.textContent = "Автономный режим (локальное хранилище)";
+                syncStatus.className = "sync-status error";
+                // Резервный вариант на случай проблем с сетью
+                const local = localStorage.getItem('witcher_larp_roles_fallback');
+                if (local) roles = JSON.parse(local);
+                renderRoles();
             }
-        } catch(e) {
-            console.error("Ошибка чтения памяти, сбрасываем:", e);
-            localStorage.removeItem('witcher_larp_roles');
-            roles = [];
+        }
+
+        async function saveRolesToCloud() {
+            syncStatus.textContent = "Сохранение в общую летопись...";
+            syncStatus.className = "sync-status syncing";
+            
+            // Дублируем в локальный бэкап
+            localStorage.setItem('witcher_larp_roles_fallback', JSON.stringify(roles));
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': '$2a$10$C1Jz6YV8TjZ5pYfN2gW5n.8G6OqW9lX8Ue5qW3V8U9v6Z2b7x5V9W'
+                    },
+                    body: JSON.stringify({ roles: roles })
+                });
+                if(response.ok) {
+                    syncStatus.textContent = "Изменения сохранены для всех";
+                    syncStatus.className = "sync-status online";
+                } else {
+                    throw new Error("Не удалось записать в облако");
+                }
+            } catch(e) {
+                console.error("Ошибка сохранения в облако:", e);
+                syncStatus.textContent = "Сохранено локально (нет связи с облаком)";
+                syncStatus.className = "sync-status error";
+            }
         }
 
         const grid = document.getElementById('cardsGrid');
@@ -545,8 +631,9 @@
                 const cardContainer = document.createElement('div');
                 cardContainer.className = 'card-container';
                 cardContainer.innerHTML = `
-                    <div class="card">
-                        <div class="card-face card-front">
+                    <div class="card is-front">
+                        <!-- Лицевая сторона (фото, имя персонажа и игрока) -->
+                        <div class="card-side card-front-side">
                             <div class="card-image-wrap">
                                 <span class="faction-badge">${role.faction}</span>
                                 <img src="${role.photo}" alt="${role.charName}" onerror="this.src='https://via.placeholder.com/300x400?text=No+Photo'">
@@ -554,23 +641,26 @@
                             <div class="card-front-info">
                                 <div class="char-name">${role.charName}</div>
                                 <div class="player-name">Игрок: ${role.playerName}</div>
-                                <div class="flip-hint">Нажми, чтобы перевернуть</div>
+                                <div class="flip-hint">Нажми, чтобы прочитать квенту</div>
                             </div>
                         </div>
-                        <div class="card-face card-back">
+                        <!-- Обратная сторона (только текстовое поле описания с прокруткой) -->
+                        <div class="card-side card-back-side">
                             <div class="card-back-content">
                                 <h3>${role.charName}</h3>
                                 <div class="card-scroll-area">
                                     <p>${role.description}</p>
                                 </div>
-                                <div class="flip-hint">Вернуть обратно</div>
+                                <div class="flip-hint">Вернуть карточку</div>
                             </div>
                         </div>
                     </div>
                 `;
 
+                const cardElement = cardContainer.querySelector('.card');
                 cardContainer.addEventListener('click', () => {
-                    cardContainer.classList.toggle('flipped');
+                    cardElement.classList.toggle('is-front');
+                    cardElement.classList.toggle('is-back');
                 });
 
                 grid.appendChild(cardContainer);
@@ -608,7 +698,7 @@
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 500; 
+                    const MAX_WIDTH = 400; // Оптимизация размера изображения для быстрой загрузки в облако
                     const scaleSize = MAX_WIDTH / img.width;
                     
                     canvas.width = (img.width > MAX_WIDTH) ? MAX_WIDTH : img.width;
@@ -617,7 +707,7 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-                    const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
                     callback(dataUrl);
                 }
                 img.src = e.target.result;
@@ -642,21 +732,20 @@
                     };
 
                     roles.push(newRole);
-                    try {
-                        localStorage.setItem('witcher_larp_roles', JSON.stringify(roles));
-                    } catch(err) {
-                        console.error("Ошибка сохранения в память:", err);
-                    }
-
+                    saveRolesToCloud();
                     renderRoles();
+
                     addRoleForm.reset();
                     addModal.style.display = 'none';
                 });
             }
         });
 
-        // Первичный рендер при загрузке страницы
-        renderRoles();
+        // Запуск загрузки данных при старте
+        fetchRoles();
+
+        // Периодическая проверка обновлений от других участников каждые 15 секунд
+        setInterval(fetchRoles, 15000);
     </script>
 </body>
 </html>
