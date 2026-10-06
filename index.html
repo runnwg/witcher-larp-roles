@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сетка ролей — Ведьмак: Праздник бочки (Туссент)</title>
+    <title>Летопись — Ведьмак: Праздник бочки (Туссент)</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -80,16 +80,8 @@
             flex-direction: column;
             gap: 20px;
         }
-        .top-action-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
         .search-box {
-            flex: 1;
-            min-width: 280px;
+            width: 100%;
         }
         .search-box input {
             width: 100%;
@@ -102,38 +94,6 @@
             border-radius: 8px;
             outline: none;
             box-shadow: inset 0 3px 8px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5);
-        }
-        .toussaint-btn {
-            background: linear-gradient(135deg, #3d0e16 0%, #1a0609 100%);
-            border: 2px solid var(--gold);
-            color: var(--gold-light);
-            padding: 14px 28px;
-            font-family: 'Cinzel', serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            cursor: pointer;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.7), inset 0 0 15px rgba(212, 175, 55, 0.25);
-            transition: all 0.35s ease;
-            text-transform: uppercase;
-        }
-        .toussaint-btn span {
-            font-size: 1.3rem;
-            color: var(--gold);
-        }
-        .toussaint-btn:hover {
-            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
-            color: #110709;
-            border-color: var(--gold-light);
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
-            transform: translateY(-2px);
-        }
-        .toussaint-btn:hover span {
-            color: #110709;
         }
         .filters {
             display: flex;
@@ -215,6 +175,28 @@
             height: 100%;
             object-fit: contain;
             object-position: center;
+            transition: transform 0.3s ease;
+        }
+        .card-front-side img:hover {
+            transform: scale(1.03);
+        }
+        .zoom-hint {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            background: rgba(17, 7, 9, 0.8);
+            border: 1px solid var(--gold-dark);
+            color: var(--gold-light);
+            font-size: 0.65rem;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: 'Cinzel', serif;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .card-image-wrap:hover .zoom-hint {
+            opacity: 1;
         }
         .faction-badge {
             position: absolute;
@@ -296,28 +278,6 @@
             text-align: justify;
             white-space: pre-wrap;
         }
-        .card-actions-back {
-            display: flex;
-            gap: 8px;
-            margin-top: 6px;
-        }
-        .edit-card-btn {
-            flex: 1;
-            background: var(--wine-deep);
-            border: 1px solid var(--gold-dark);
-            color: var(--gold-light);
-            padding: 6px;
-            font-family: 'Cinzel', serif;
-            font-size: 0.75rem;
-            cursor: pointer;
-            border-radius: 4px;
-            text-align: center;
-            text-transform: uppercase;
-        }
-        .edit-card-btn:hover {
-            background: var(--gold);
-            color: var(--toussaint-bg);
-        }
         .empty-notice {
             grid-column: 1 / -1;
             text-align: center;
@@ -335,34 +295,35 @@
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(10, 4, 6, 0.88);
             justify-content: center; align-items: center;
-            z-index: 1000; padding: 20px; overflow-y: auto;
+            z-index: 1000; padding: 20px;
         }
-        .modal-content {
-            background: var(--toussaint-panel);
+        .close-modal {
+            position: absolute;
+            top: 25px; right: 30px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.8rem;
+            z-index: 10;
+        }
+        .image-modal-content {
+            background: transparent;
+            border: none;
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+        }
+        .image-modal-content img {
+            max-width: 100%;
+            max-height: 85vh;
             border: 3px solid var(--gold);
-            padding: 35px; width: 100%; max-width: 520px;
-            border-radius: 12px; position: relative; max-height: 90vh; overflow-y: auto;
+            border-radius: 8px;
+            object-fit: contain;
+            background: #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
         }
-        .modal-content h2 {
-            font-family: 'Cinzel', serif; color: var(--gold-light);
-            margin-bottom: 25px; text-align: center; font-size: 1.5rem;
-            border-bottom: 1px solid var(--gold-dark); padding-bottom: 10px;
-        }
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; font-family: 'Cinzel', serif; font-size: 0.85rem; color: var(--gold); margin-bottom: 6px; }
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%; padding: 12px; background: var(--toussaint-bg);
-            border: 1px solid var(--gold-dark); color: var(--text-main);
-            font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; border-radius: 6px;
-        }
-        .form-group textarea { resize: vertical; height: 120px; }
-        .submit-btn {
-            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
-            color: var(--toussaint-bg); border: none; padding: 14px 20px;
-            font-family: 'Cinzel', serif; font-weight: bold; cursor: pointer;
-            width: 100%; border-radius: 6px; margin-top: 15px; text-transform: uppercase;
-        }
-        .close-modal { position: absolute; top: 15px; right: 20px; color: var(--text-muted); cursor: pointer; font-size: 1.8rem; }
     </style>
 </head>
 <body>
@@ -370,17 +331,12 @@
     <header>
         <div class="subtitle-ornament">Княжество Туссент • Земля любви и вина</div>
         <h1>Праздник Бочки</h1>
-        <div id="syncStatus" class="sync-status">Подключение к общей летописи...</div>
+        <div id="syncStatus" class="sync-status">Загрузка летописи...</div>
     </header>
 
     <div class="controls-wrapper">
-        <div class="top-action-bar">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Поиск благородного гостя или персонажа...">
-            </div>
-            <button class="toussaint-btn" id="openModalBtn">
-                <span>⚔</span> Добавить роль
-            </button>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Поиск благородного гостя или персонажа...">
         </div>
         <div class="filters" id="filterContainer">
             <button class="filter-btn active" data-faction="all">Все благородные</button>
@@ -399,82 +355,34 @@
 
     <div class="grid" id="cardsGrid"></div>
 
-    <!-- Модальное окно запроса пин-кода администратора -->
-    <div class="modal" id="authModal">
-        <div class="modal-content" style="max-width: 400px;">
-            <span class="close-modal" id="closeAuthModal">&times;</span>
-            <h2>Доступ хранителей</h2>
-            <div class="form-group">
-                <label>Введите код администратора</label>
-                <input type="password" id="adminPasswordInput" placeholder="Секретный код...">
-            </div>
-            <button type="button" class="submit-btn" id="submitAuthBtn">Подтвердить</button>
-            <div id="authError" style="color: #e53935; font-size: 0.9rem; text-align: center; margin-top: 10px; display: none;">Неверный код!</div>
-        </div>
-    </div>
-
-    <!-- Модальное окно добавления/редактирования роли -->
-    <div class="modal" id="addModal">
-        <div class="modal-content">
-            <span class="close-modal" id="closeModal">&times;</span>
-            <h2 id="modalTitle">Добавить персонажа</h2>
-            <form id="addRoleForm">
-                <input type="hidden" id="editRoleId">
-                <div class="form-group">
-                    <label>Имя персонажа</label>
-                    <input type="text" id="charNameInput" required placeholder="Например: Граф де Бельгаард">
-                </div>
-                <div class="form-group">
-                    <label>Имя игрока</label>
-                    <input type="text" id="playerNameInput" required placeholder="Например: Иван">
-                </div>
-                <div class="form-group">
-                    <label>Фракция / Дом</label>
-                    <select id="factionInput">
-                        <option value="Княжеский двор">Княжеский двор</option>
-                        <option value="Де Бельгаард">Де Бельгаард</option>
-                        <option value="Де Туффо">Де Туффо</option>
-                        <option value="Де Кастиль Ровелло">Де Кастиль Ровелло</option>
-                        <option value="Послы">Послы</option>
-                        <option value="Межевые рыцари">Межевые рыцари</option>
-                        <option value="Ведьмаки">Ведьмаки</option>
-                        <option value="Последователи Пророка Лебеды">Последователи Пророка Лебеды</option>
-                        <option value="Жрецы Вечного Огня">Жрецы Вечного Огня</option>
-                        <option value="Другие гости праздника">Другие гости праздника</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Ссылка на портрет (URL изображения)</label>
-                    <input type="url" id="photoUrlInput" placeholder="Прямая ссылка на картинку">
-                    <small style="color: var(--text-muted); display:block; margin-top:4px;">Если оставить пустым, подставится заглушка</small>
-                </div>
-                <div class="form-group">
-                    <label>Квента, цели и секреты</label>
-                    <textarea id="descInput" required placeholder="Опишите характер, тайны и владения персонажа..."></textarea>
-                </div>
-                <button type="submit" class="submit-btn" id="submitBtnText">Занести в летопись</button>
-            </form>
+    <!-- Модальное окно для приближения фото -->
+    <div class="modal" id="imageModal">
+        <div class="close-modal" id="closeImageModal">&times;</div>
+        <div class="modal-content image-modal-content">
+            <img id="modalZoomImage" src="" alt="Портрет">
         </div>
     </div>
 
     <script>
         const BIN_ID = '6ac4cb9dffd5d16053522d13';
-        const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-
-        // Укажите здесь свой секретный пин-код/пароль для 3 админов
-        const ADMIN_PIN = "toussaint2026"; 
+        const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
 
         let roles = [];
-        let pendingAction = null; // Какое действие хотел сделать админ после ввода пароля
         const syncStatus = document.getElementById('syncStatus');
+        const grid = document.getElementById('cardsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const filterContainer = document.getElementById('filterContainer');
+        const imageModal = document.getElementById('imageModal');
+        const modalZoomImage = document.getElementById('modalZoomImage');
+        const closeImageModal = document.getElementById('closeImageModal');
+
+        let currentFaction = 'all';
 
         async function fetchRoles() {
-            syncStatus.textContent = "Синхронизация с летописью...";
+            syncStatus.textContent = "Загрузка данных летописи...";
             syncStatus.className = "sync-status syncing";
             try {
-                const response = await fetch(API_URL, {
-                    headers: { 'X-Master-Key': '$2a$10$CaH0kNC6Zc07HLFNngmnwOKb3Ql3tb/WW83pLtLfVASNRBqPObyxW' }
-                });
+                const response = await fetch(API_URL);
                 if (response.ok) {
                     const data = await response.json();
                     if (data && data.record && Array.isArray(data.record.roles)) {
@@ -482,101 +390,17 @@
                     } else if (Array.isArray(data.record)) {
                         roles = data.record;
                     }
-                    syncStatus.textContent = "Летопись актуальна (общий доступ)";
+                    syncStatus.textContent = "Летопись актуальна";
                     syncStatus.className = "sync-status online";
                     renderRoles();
                 } else {
-                    throw new Error("Ошибка сервера: " + response.status);
+                    throw new Error("Не удалось загрузить данные");
                 }
             } catch(e) {
-                console.warn("Автономный режим:", e);
-                syncStatus.textContent = "Сохранено локально (нет связи с облаком)";
-                syncStatus.className = "sync-status error";
-                const local = localStorage.getItem('witcher_larp_roles_fallback');
-                if (local) roles = JSON.parse(local);
-                renderRoles();
-            }
-        }
-
-        async function saveRolesToCloud() {
-            syncStatus.textContent = "Сохранение в общую летопись...";
-            syncStatus.className = "sync-status syncing";
-            
-            localStorage.setItem('witcher_larp_roles_fallback', JSON.stringify(roles));
-
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': '$2a$10$CaH0kNC6Zc07HLFNngmnwOKb3Ql3tb/WW83pLtLfVASNRBqPObyxW'
-                    },
-                    body: JSON.stringify({ roles: roles })
-                });
-                if(response.ok) {
-                    syncStatus.textContent = "Изменения сохранены для всех";
-                    syncStatus.className = "sync-status online";
-                } else {
-                    throw new Error("Сервер отклонил запрос");
-                }
-            } catch(e) {
-                console.error("Ошибка сохранения в облако:", e);
-                syncStatus.textContent = "Сохранено локально (нет связи с облаком)";
+                syncStatus.textContent = "Ошибка загрузки летописи";
                 syncStatus.className = "sync-status error";
             }
         }
-
-        const grid = document.getElementById('cardsGrid');
-        const searchInput = document.getElementById('searchInput');
-        const filterContainer = document.getElementById('filterContainer');
-        const addModal = document.getElementById('addModal');
-        const openModalBtn = document.getElementById('openModalBtn');
-        const closeModal = document.getElementById('closeModal');
-        const addRoleForm = document.getElementById('addRoleForm');
-        const modalTitle = document.getElementById('modalTitle');
-        const submitBtnText = document.getElementById('submitBtnText');
-        const editRoleId = document.getElementById('editRoleId');
-
-        // Модалка авторизации
-        const authModal = document.getElementById('authModal');
-        const closeAuthModal = document.getElementById('closeAuthModal');
-        const submitAuthBtn = document.getElementById('submitAuthBtn');
-        const adminPasswordInput = document.getElementById('adminPasswordInput');
-        const authError = document.getElementById('authError');
-
-        let currentFaction = 'all';
-
-        // Проверяем, авторизован ли админ в текущей сессии браузера
-        function checkAdminAccess(callback) {
-            if (sessionStorage.getItem('toussaint_admin_logged') === 'true') {
-                callback(); // Если уже вводил правильный пароль в этой вкладке — сразу пускаем
-            } else {
-                pendingAction = callback;
-                adminPasswordInput.value = '';
-                authError.style.display = 'none';
-                authModal.style.display = 'flex';
-                adminPasswordInput.focus();
-            }
-        }
-
-        submitAuthBtn.addEventListener('click', () => {
-            if (adminPasswordInput.value === ADMIN_PIN) {
-                sessionStorage.setItem('toussaint_admin_logged', 'true');
-                authModal.style.display = 'none';
-                if (pendingAction) {
-                    pendingAction();
-                    pendingAction = null;
-                }
-            } else {
-                authError.style.display = 'block';
-            }
-        });
-
-        adminPasswordInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') submitAuthBtn.click();
-        });
-
-        closeAuthModal.addEventListener('click', () => { authModal.style.display = 'none'; });
 
         function renderRoles() {
             grid.innerHTML = '';
@@ -596,12 +420,15 @@
             filtered.forEach(role => {
                 const cardContainer = document.createElement('div');
                 cardContainer.className = 'card-container';
+                const photoSrc = role.photo || 'https://via.placeholder.com/300x400?text=No+Photo';
+                
                 cardContainer.innerHTML = `
                     <div class="card is-front">
                         <div class="card-side card-front-side">
-                            <div class="card-image-wrap">
+                            <div class="card-image-wrap" data-img="${photoSrc}">
                                 <span class="faction-badge">${role.faction}</span>
-                                <img src="${role.photo || 'https://via.placeholder.com/300x400?text=No+Photo'}" alt="${role.charName}" onerror="this.src='https://via.placeholder.com/300x400?text=No+Photo'">
+                                <img src="${photoSrc}" alt="${role.charName}" onerror="this.src='https://via.placeholder.com/300x400?text=No+Photo'">
+                                <div class="zoom-hint">Нажмите для приближения</div>
                             </div>
                             <div class="card-front-info">
                                 <div class="char-name">${role.charName}</div>
@@ -615,9 +442,6 @@
                                 <div class="card-scroll-area">
                                     <p>${role.description}</p>
                                 </div>
-                                <div class="card-actions-back">
-                                    <button class="edit-card-btn" data-id="${role.id}">✏ Редактировать</button>
-                                </div>
                                 <div class="flip-hint">Вернуть карточку</div>
                             </div>
                         </div>
@@ -625,18 +449,17 @@
                 `;
 
                 const cardElement = cardContainer.querySelector('.card');
+                
                 cardContainer.addEventListener('click', (e) => {
-                    if (e.target.closest('.edit-card-btn')) return;
+                    if (e.target.closest('.card-image-wrap')) return;
                     cardElement.classList.toggle('is-front');
                     cardElement.classList.toggle('is-back');
                 });
 
-                cardContainer.querySelector('.edit-card-btn').addEventListener('click', (e) => {
+                cardContainer.querySelector('.card-image-wrap').addEventListener('click', (e) => {
                     e.stopPropagation();
-                    // Запрашиваем пин-код перед открытием редактирования
-                    checkAdminAccess(() => {
-                        openEditModal(role.id);
-                    });
+                    modalZoomImage.src = photoSrc;
+                    imageModal.style.display = 'flex';
                 });
 
                 grid.appendChild(cardContainer);
@@ -654,69 +477,8 @@
 
         searchInput.addEventListener('input', renderRoles);
 
-        // Кнопка добавления роли теперь проверяет права админа
-        openModalBtn.addEventListener('click', () => {
-            checkAdminAccess(() => {
-                modalTitle.textContent = "Добавить персонажа";
-                submitBtnText.textContent = "Занести в летопись";
-                editRoleId.value = "";
-                addRoleForm.reset();
-                addModal.style.display = 'flex';
-            });
-        });
-
-        function openEditModal(id) {
-            const role = roles.find(r => r.id == id);
-            if (!role) return;
-
-            modalTitle.textContent = "Редактировать персонажа";
-            submitBtnText.textContent = "Сохранить изменения";
-            editRoleId.value = role.id;
-            document.getElementById('charNameInput').value = role.charName;
-            document.getElementById('playerNameInput').value = role.playerName;
-            document.getElementById('factionInput').value = role.faction;
-            document.getElementById('photoUrlInput').value = role.photo || '';
-            document.getElementById('descInput').value = role.description;
-
-            addModal.style.display = 'flex';
-        }
-
-        closeModal.addEventListener('click', () => { addModal.style.display = 'none'; });
-        window.addEventListener('click', (e) => { if(e.target === addModal) addModal.style.display = 'none'; });
-
-        addRoleForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const editingId = editRoleId.value;
-            const inputUrl = document.getElementById('photoUrlInput').value.trim();
-            const photoUrl = inputUrl !== "" ? inputUrl : 'https://via.placeholder.com/300x400?text=No+Photo';
-
-            if (editingId) {
-                const index = roles.findIndex(r => r.id == editingId);
-                if (index !== -1) {
-                    roles[index].charName = document.getElementById('charNameInput').value;
-                    roles[index].playerName = document.getElementById('playerNameInput').value;
-                    roles[index].faction = document.getElementById('factionInput').value;
-                    roles[index].photo = photoUrl;
-                    roles[index].description = document.getElementById('descInput').value;
-                }
-            } else {
-                const newRole = {
-                    id: Date.now(),
-                    charName: document.getElementById('charNameInput').value,
-                    playerName: document.getElementById('playerNameInput').value,
-                    faction: document.getElementById('factionInput').value,
-                    photo: photoUrl,
-                    description: document.getElementById('descInput').value
-                };
-                roles.push(newRole);
-            }
-
-            saveRolesToCloud();
-            renderRoles();
-
-            addRoleForm.reset();
-            addModal.style.display = 'none';
-        });
+        closeImageModal.addEventListener('click', () => { imageModal.style.display = 'none'; });
+        imageModal.addEventListener('click', (e) => { if(e.target === imageModal) imageModal.style.display = 'none'; });
 
         fetchRoles();
     </script>
