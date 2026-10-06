@@ -4,16 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Сетка ролей — Ведьмак: Праздник бочки</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #12100e;
-            --panel-bg: #1c1815;
-            --gold: #c5a059;
-            --gold-light: #e6c584;
-            --text-main: #d1c7bd;
-            --text-muted: #8c8275;
-            --accent-red: #8b0000;
+            --bg-color: #0b0908;
+            --panel-bg: #15120f;
+            --gold: #d4af37;
+            --gold-light: #f3e5ab;
+            --gold-dark: #8c7323;
+            --text-main: #dcd6cd;
+            --text-muted: #948877;
+            --card-border: #b89742;
         }
 
         * {
@@ -26,60 +27,60 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             font-family: 'Playfair Display', serif;
-            background-image: radial-gradient(circle at 50% 20%, #25201b 0%, #12100e 100%);
+            background-image: radial-gradient(circle at 50% 15%, #1f1914 0%, var(--bg-color) 85%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 30px 20px;
         }
 
         header {
             text-align: center;
             margin-bottom: 40px;
-            padding: 20px;
-            border-bottom: 2px solid var(--gold);
+            padding: 25px;
+            border-bottom: 2px solid var(--gold-dark);
+            background: linear-gradient(to bottom, rgba(21,18,15,0.8), transparent);
         }
 
         h1 {
-            font-family: 'Cinzel', serif;
+            font-family: 'Cinzel Decorative', serif;
             color: var(--gold);
-            font-size: 2.5rem;
+            font-size: 2.3rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-        }
-
-        p.subtitle {
-            color: var(--text-muted);
-            font-style: italic;
-            font-size: 1.1rem;
+            text-shadow: 0 3px 6px rgba(0,0,0,0.9);
         }
 
         .controls {
             max-width: 1200px;
-            margin: 0 auto 30px auto;
+            margin: 0 auto 40px auto;
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 20px;
             justify-content: space-between;
             align-items: center;
         }
 
         .search-box {
             flex: 1;
-            min-width: 250px;
-            position: relative;
+            min-width: 280px;
         }
 
         .search-box input {
             width: 100%;
             padding: 12px 20px;
             background: var(--panel-bg);
-            border: 1px solid var(--gold);
+            border: 2px solid var(--gold-dark);
             color: var(--text-main);
             font-family: 'Playfair Display', serif;
             font-size: 1rem;
-            border-radius: 4px;
+            border-radius: 6px;
             outline: none;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--gold);
         }
 
         .filters {
@@ -90,14 +91,15 @@
 
         .filter-btn {
             background: var(--panel-bg);
-            border: 1px solid var(--text-muted);
+            border: 1px solid var(--gold-dark);
             color: var(--text-main);
-            padding: 8px 16px;
+            padding: 10px 16px;
             cursor: pointer;
             font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             border-radius: 4px;
             transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .filter-btn:hover, .filter-btn.active {
@@ -105,19 +107,22 @@
             color: var(--bg-color);
             border-color: var(--gold-light);
             font-weight: bold;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
         }
 
         .grid {
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 35px;
+            justify-items: center;
         }
 
-        /* 3D Карточка */
+        /* Формат карт Таро (260px на 400px) */
         .card-container {
-            perspective: 1000px;
+            perspective: 1200px;
+            width: 260px;
             height: 400px;
             cursor: pointer;
         }
@@ -127,7 +132,12 @@
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.7));
+        }
+
+        .card-container:hover .card {
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3));
         }
 
         .card-container.flipped .card {
@@ -139,425 +149,41 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 8px;
-            border: 2px solid var(--gold);
+            border-radius: 12px;
+            border: 3px solid var(--card-border);
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            background: var(--panel-bg);
         }
 
-        /* Лицевая сторона */
+        /* Лицевая сторона карты */
         .card-front {
-            background: var(--panel-bg);
             display: flex;
             flex-direction: column;
+            border-image: linear-gradient(to bottom, var(--gold), var(--gold-dark)) 1;
+        }
+
+        .card-image-wrap {
+            width: 100%;
+            height: 68%;
+            position: relative;
+            border-bottom: 2px solid var(--gold-dark);
+            overflow: hidden;
         }
 
         .card-front img {
             width: 100%;
-            height: 70%;
+            height: 100%;
             object-fit: cover;
-            border-bottom: 1px solid var(--gold);
+            transition: transform 0.5s ease;
         }
 
-        .card-front-info {
-            padding: 15px;
-            text-align: center;
-            background: linear-gradient(to top, #1c1815, #12100e);
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .char-name {
-            font-family: 'Cinzel', serif;
-            color: var(--gold-light);
-            font-size: 1.2rem;
-            margin-bottom: 5px;
-        }
-
-        .player-name {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            font-style: italic;
+        .card-container:hover .card-front img {
+            transform: scale(1.05);
         }
 
         .faction-badge {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            padding: 4px 8px;
-            font-family: 'Cinzel', serif;
-            font-size: 0.75rem;
-            border-radius: 3px;
-        }
-
-        /* Обратная сторона */
-        .card-back {
-            background: #2b241d url('https://www.transparenttextures.com/patterns/aged-paper.png');
-            color: #2b241d;
-            transform: rotateY(180deg);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .card-back h3 {
-            font-family: 'Cinzel', serif;
-            color: #4a2e18;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #8c6d48;
-            padding-bottom: 8px;
-            margin-bottom: 10px;
-        }
-
-        .card-back p {
-            font-size: 0.95rem;
-            line-height: 1.4;
-            color: #3b2b20;
-            overflow-y: auto;
-            max-height: 260px;
-            padding-right: 5px;
-        }
-
-        .flip-hint {
-            text-align: center;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 15px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-family: 'Cinzel', serif;
-        }
-
-        .card-back .flip-hint {
-            color: #735338;
-        }
-
-        /* Кнопка добавления роли */
-        .add-card-btn {
-            background: transparent;
-            border: 2px dashed var(--gold);
-            border-radius: 8px;
-            height: 400px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: var(--gold);
-            font-family: 'Cinzel', serif;
-        }
-
-        .add-card-btn:hover {
-            background: rgba(197, 160, 89, 0.05);
-            border-color: var(--gold-light);
-        }
-
-        .add-card-btn span {
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-
-        /* Модальное окно */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: var(--panel-bg);
-            border: 2px solid var(--gold);
-            padding: 30px;
-            width: 100%;
-            max-width: 500px;
-            border-radius: 8px;
-            position: relative;
-        }
-
-        .modal-content h2 {
-            font-family: 'Cinzel', serif;
-            color: var(--gold);
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
-            color: var(--gold-light);
-            margin-bottom: 5px;
-        }
-
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%;
-            padding: 10px;
-            background: var(--bg-color);
-            border: 1px solid var(--text-muted);
-            color: var(--text-main);
-            font-family: 'Playfair Display', serif;
-            border-radius: 4px;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            height: 100px;
-        }
-
-        .submit-btn {
-            background: var(--gold);
-            color: var(--bg-color);
-            border: none;
-            padding: 12px 20px;
-            font-family: 'Cinzel', serif;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            border-radius: 4px;
-            transition: background 0.3s;
-        }
-
-        .submit-btn:hover {
-            background: var(--gold-light);
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 1.5rem;
-            font-family: sans-serif;
-        }
-
-        .close-modal:hover {
-            color: var(--gold);
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h1>Сетка ролей • Ведьмак: Праздник Бочки</h1>
-
-    <div class="controls">
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Поиск по имени персонажа или игрока...">
-        </div>
-        <div class="filters" id="filterContainer">
-            <button class="filter-btn active" data-faction="all">Все</button>
-            <button class="filter-btn" data-faction="Де Бельгаард">Де Бельгаард</button>
-            <button class="filter-btn" data-faction="Де Туффо">Де Туффо</button>
-            <button class="filter-btn" data-faction="Де Кастиль Ровелло">Де Кастиль Ровелло</button>
-            <button class="filter-btn" data-faction="Гости">Гости</button>
-        </div>
-    </div>
-
-    <div class="grid" id="cardsGrid">
-        <!-- Карточки будут добавлены динамически через JS -->
-    </div>
-
-    <!-- Модальное окно добавления роли -->
-    <div class="modal" id="addModal">
-        <div class="modal-content">
-            <span class="close-modal" id="closeModal">&times;</span>
-            <h2>Добавить персонажа</h2>
-            <form id="addRoleForm">
-                <div class="form-group">
-                    <label>Имя персонажа</label>
-                    <input type="text" id="charNameInput" required placeholder="Например: Геральт из Ривии">
-                </div>
-                <div class="form-group">
-                    <label>Имя игрока</label>
-                    <input type="text" id="playerNameInput" required placeholder="Например: Алексей">
-                </div>
-                <div class="form-group">
-                    <label>Фракция / Категория</label>
-                    <select id="factionInput">
-                        <option value="Ведьмаки">Ведьмаки</option>
-                        <option value="Северные королевства">Северные королевства</option>
-                        <option value="Нильфгаард">Нильфгаард</option>
-                        <option value="Чародеи">Чародеи</option>
-                        <option value="Нелюди и монстры">Нелюди и монстры</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Ссылка на фото в костюме</label>
-                    <input type="url" id="photoInput" required placeholder="https://example.com/photo.jpg">
-                </div>
-                <div class="form-group">
-                    <label>Краткое описание / Квента</label>
-                    <textarea id="descInput" required placeholder="Пара слов о характере, целях и предыстории персонажа..."></textarea>
-                </div>
-                <button type="submit" class="submit-btn">Опубликовать карточку</button>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        // Начальный список ролей для примера
-        let roles = [
-            {
-                id: 1,
-                charName: "Геральт из Ривии",
-                playerName: "Максим",
-                faction: "Ведьмаки",
-                photo: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&auto=format&fit=crop&q=80",
-                description: "Ведьмак из Школы Волка. Странствует по трактам, берется за заказы на чудовищ, старается сохранять нейтралитет в большой политике, что получается с переменным успехом."
-            },
-            {
-                id: 2,
-                charName: "Йеннифэр из Венгерберга",
-                playerName: "Елена",
-                faction: "Чародеи",
-                photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80",
-                description: "Могущественная чародейка, член Совета Магов. Амбициозна, остра на язык, носит черно-белые одежды и пахнет сиренью и крыжовником."
-            },
-            {
-                id: 3,
-                charName: "Кагыр маэур Дыффрин аэп Кеаллах",
-                playerName: "Дмитрий",
-                faction: "Нильфгаард",
-                photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80",
-                description: "Рыцарствующий офицер из Нильфгаарда. Преследует свои скрытые цели, связанные с Предназначением, и стремится доказать свою честь."
-            }
-        ];
-
-        // Загрузка из localStorage, если есть сохраненные
-        if(localStorage.getItem('witcher_larp_roles')) {
-            roles = JSON.parse(localStorage.getItem('witcher_larp_roles'));
-        }
-
-        const grid = document.getElementById('cardsGrid');
-        const searchInput = document.getElementById('searchInput');
-        const filterContainer = document.getElementById('filterContainer');
-        const addModal = document.getElementById('addModal');
-        const closeModal = document.getElementById('closeModal');
-        const addRoleForm = document.getElementById('addRoleForm');
-
-        let currentFaction = 'all';
-
-        function renderRoles() {
-            grid.innerHTML = '';
-
-            const searchText = searchInput.value.toLowerCase();
-
-            const filtered = roles.filter(role => {
-                const matchesFaction = currentFaction === 'all' || role.faction === currentFaction;
-                const matchesSearch = role.charName.toLowerCase().includes(searchText) || role.playerName.toLowerCase().includes(searchText);
-                return matchesFaction && matchesSearch;
-            });
-
-            filtered.forEach(role => {
-                const cardContainer = document.createElement('div');
-                cardContainer.className = 'card-container';
-                cardContainer.innerHTML = `
-                    <div class="card">
-                        <div class="card-face card-front">
-                            <span class="faction-badge">${role.faction}</span>
-                            <img src="${role.photo}" alt="${role.charName}" onerror="this.src='https://via.placeholder.com/300x400?text=No+Photo'">
-                            <div class="card-front-info">
-                                <div class="char-name">${role.charName}</div>
-                                <div class="player-name">Игрок: ${role.playerName}</div>
-                                <div class="flip-hint">Нажми, чтобы перевернуть</div>
-                            </div>
-                        </div>
-                        <div class="card-face card-back">
-                            <div>
-                                <h3>${role.charName}</h3>
-                                <p>${role.description}</p>
-                            </div>
-                            <div class="flip-hint">Вернуть обратно</div>
-                        </div>
-                    </div>
-                `;
-
-                // Обработчик переворота карточки
-                cardContainer.addEventListener('click', () => {
-                    cardContainer.classList.toggle('flipped');
-                });
-
-                grid.appendChild(cardContainer);
-            });
-
-            // Добавляем карточку-кнопку «Добавить персонажа» в конец сетки
-            const addBtnDiv = document.createElement('div');
-            addBtnDiv.className = 'add-card-btn';
-            addBtnDiv.innerHTML = `
-                <span>+</span>
-                <div>Добавить роль</div>
-            `;
-            addBtnDiv.addEventListener('click', () => {
-                addModal.style.display = 'flex';
-            });
-            grid.appendChild(addBtnDiv);
-        }
-
-        // Фильтрация по кнопкам
-        filterContainer.addEventListener('click', (e) => {
-            if(e.target.classList.contains('filter-btn')) {
-                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-                e.target.classList.add('active');
-                currentFaction = e.target.getAttribute('data-faction');
-                renderRoles();
-            }
-        });
-
-        // Поиск
-        searchInput.addEventListener('input', renderRoles);
-
-        // Закрытие модального окна
-        closeModal.addEventListener('click', () => {
-            addModal.style.display = 'none';
-        });
-
-        window.addEventListener('click', (e) => {
-            if(e.target === addModal) {
-                addModal.style.display = 'none';
-            }
-        });
-
-        // Сохранение нового персонажа
-        addRoleForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const newRole = {
-                id: Date.now(),
-                charName: document.getElementById('charNameInput').value,
-                playerName: document.getElementById('playerNameInput').value,
-                faction: document.getElementById('factionInput').value,
-                photo: document.getElementById('photoInput').value,
-                description: document.getElementById('descInput').value
-            };
-
-            roles.push(newRole);
-            localStorage.setItem('witcher_larp_roles', JSON.stringify(roles));
-
-            addRoleForm.reset();
-            addModal.style.display = 'none';
-            renderRoles();
-        });
-
-        // Первичный рендер
-        renderRoles();
-    </script>
-</body>
-</html>
+            top: 8px;
+            right: 8px;
+            background: rgba(11, 9, 8, 0.85);
+            border:
