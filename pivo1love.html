@@ -318,6 +318,22 @@
             background: var(--gold);
             color: var(--toussaint-bg);
         }
+        .delete-card-btn {
+            background: #4a1515;
+            border: 1px solid #e53935;
+            color: #ffcccc;
+            padding: 6px 10px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            cursor: pointer;
+            border-radius: 4px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .delete-card-btn:hover {
+            background: #e53935;
+            color: #fff;
+        }
         .empty-notice {
             grid-column: 1 / -1;
             text-align: center;
@@ -461,11 +477,11 @@
         const BIN_ID = '6ac4cb9dffd5d16053522d13';
         const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-        // Укажите здесь свой секретный пин-код/пароль для 3 админов
+        // Секретный пин-код для администраторов
         const ADMIN_PIN = "toussaint2026"; 
 
         let roles = [];
-        let pendingAction = null; // Какое действие хотел сделать админ после ввода пароля
+        let pendingAction = null; 
         const syncStatus = document.getElementById('syncStatus');
 
         async function fetchRoles() {
@@ -546,10 +562,9 @@
 
         let currentFaction = 'all';
 
-        // Проверяем, авторизован ли админ в текущей сессии браузера
         function checkAdminAccess(callback) {
             if (sessionStorage.getItem('toussaint_admin_logged') === 'true') {
-                callback(); // Если уже вводил правильный пароль в этой вкладке — сразу пускаем
+                callback(); 
             } else {
                 pendingAction = callback;
                 adminPasswordInput.value = '';
@@ -617,6 +632,7 @@
                                 </div>
                                 <div class="card-actions-back">
                                     <button class="edit-card-btn" data-id="${role.id}">✏ Редактировать</button>
+                                    <button class="delete-card-btn" data-id="${role.id}">🗑 Удалить</button>
                                 </div>
                                 <div class="flip-hint">Вернуть карточку</div>
                             </div>
@@ -626,21 +642,37 @@
 
                 const cardElement = cardContainer.querySelector('.card');
                 cardContainer.addEventListener('click', (e) => {
-                    if (e.target.closest('.edit-card-btn')) return;
+                    if (e.target.closest('.edit-card-btn') || e.target.closest('.delete-card-btn')) return;
                     cardElement.classList.toggle('is-front');
                     cardElement.classList.toggle('is-back');
                 });
 
+                // Обработчик редактирования
                 cardContainer.querySelector('.edit-card-btn').addEventListener('click', (e) => {
                     e.stopPropagation();
-                    // Запрашиваем пин-код перед открытием редактирования
                     checkAdminAccess(() => {
                         openEditModal(role.id);
                     });
                 });
 
+                // Обработчик удаления
+                cardContainer.querySelector('.delete-card-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    checkAdminAccess(() => {
+                        if (confirm(`Вы уверены, что хотите стереть из летописи персонажа "${role.charName}"?`)) {
+                            deleteRole(role.id);
+                        }
+                    });
+                });
+
                 grid.appendChild(cardContainer);
             });
+        }
+
+        function deleteRole(id) {
+            roles = roles.filter(r => r.id != id);
+            saveRolesToCloud();
+            renderRoles();
         }
 
         filterContainer.addEventListener('click', (e) => {
@@ -654,7 +686,6 @@
 
         searchInput.addEventListener('input', renderRoles);
 
-        // Кнопка добавления роли теперь проверяет права админа
         openModalBtn.addEventListener('click', () => {
             checkAdminAccess(() => {
                 modalTitle.textContent = "Добавить персонажа";
